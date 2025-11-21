@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>인권 퀴즈 5번 문제</title>
+  <style>
+    body {
+      margin: 0;
+      background: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: '맑은 고딕', sans-serif;
+    }
+
+    .frame {
+      width: 1280px;
+      height: 720px;
+      background-image: url('q5.png'); /* 5번 문제 전체 이미지 */
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      border: 4px solid #000;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+
+    /* ★ 가운데 초성/정답 입력 칸 (한 칸) */
+    .input-choseong {
+      position: absolute;
+      top: 55%;              /* 위치는 필요하면 조금씩 조정 가능 */
+      left: 60%;
+      transform: translate(-50%, -50%);
+      width: 220px;
+      height: 100px;
+      font-size: 50px;
+      font-weight: 900;
+      text-align: center;
+      border: 6px solid #000;
+      background: rgba(255,255,255,0.95);
+      box-shadow: 5px 5px 0 #000;
+    }
+
+    .input-choseong:focus {
+      outline: none;
+    }
+
+    /* ★ 하단 응모 폼 영역 */
+    .form-area {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40%;
+      padding: 6px 10px;
+      border: 2px solid #000;
+      background: rgba(255,255,255,0.92);
+      box-shadow: 3px 3px 0 #000;
+    }
+
+    .form-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .form-area input[type="text"],
+    .form-area input[type="tel"] {
+      width: 48%;
+      padding: 4px 6px;
+      font-size: 14px;
+      border: 2px solid #000;
+      text-align: center;
+    }
+
+    .consent-label {
+      font-size: 12px;
+      text-align: center;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    #agree {
+      margin-right: 4px;
+      transform: scale(0.9);
+    }
+
+    button {
+      padding: 6px 16px;
+      font-size: 16px;
+      font-weight: 700;
+      border: 2px solid #000;
+      background: #ffc800;
+      cursor: pointer;
+      box-shadow: 3px 3px 0 #000;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    button:active {
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0 #000;
+    }
+  </style>
+</head>
+<body>
+
+<div class="frame">
+
+  <!-- ★ 초성/정답 입력 한 칸 -->
+  <input
+    type="text"
+    id="q5Answer"
+    class="input-choseong"
+    value="ㅇㄱ"
+    maxlength="10"
+  >
+
+
+  <!-- ★ 하단 응모 정보 폼 -->
+  <div class="form-area">
+
+    <div class="form-row">
+      <input type="text" id="name" placeholder="닉네임">
+      <input type="tel" id="phone" placeholder="010-0000-0000">
+    </div>
+
+
+    <label class="consent-label">
+      <input type="checkbox" id="agree">
+      개인정보 수집·이용에 동의합니다.
+    </label>
+
+    <button id="submitBtn">제출하기</button>
+  </div>
+
+</div>
+
+<script>
+  // ★ 네 Apps Script 웹 앱 주소
+  const SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbybuytqRKLZ5LtX9-Bn2HsSPgwIw_AIs-hvZpXpsbiV3SGXKbir98sekWsWiRhohJQNeQ/exec";
+
+  const answerInput = document.getElementById('q5Answer');
+  const nameInput   = document.getElementById('name');
+  const phoneInput  = document.getElementById('phone');
+  const agreeCheck  = document.getElementById('agree');
+  const submitBtn   = document.getElementById('submitBtn');
+// ★ 입력칸 클릭하면 placeholder 숨기기 + 벗어나면 복귀
+[nameInput, phoneInput].forEach(input => {
+  input.addEventListener("focus", () => {
+    input.dataset.placeholder = input.placeholder;  // 기존 placeholder 저장
+    input.placeholder = "";                         // 숨기기
+  });
+
+  input.addEventListener("blur", () => {
+    if (input.value.trim() === "") {
+      input.placeholder = input.dataset.placeholder; // 다시 보여주기
+    }
+  });
+});
+
+// ★ 정답 입력칸 — 딱 2글자만 입력 가능 (한글 조합 포함)
+answerInput.addEventListener("input", () => {
+  if (answerInput.value.length > 2) {
+    answerInput.value = answerInput.value.slice(0, 2);
+  }
+});
+
+answerInput.addEventListener("compositionend", () => {
+  if (answerInput.value.length > 2) {
+    answerInput.value = answerInput.value.slice(0, 2);
+  }
+});
+
+
+  // ★ 처음 클릭하면 'ㅇㄱ' 지우고 바로 입력할 수 있게
+  answerInput.addEventListener('focus', () => {
+    if (answerInput.value === 'ㅇㄱ') {
+      answerInput.value = '';
+    }
+  });
+
+  // ★ 제출 처리
+  submitBtn.addEventListener('click', () => {
+    const name   = nameInput.value.trim();
+    const phone  = phoneInput.value.trim();
+    const answer = answerInput.value.trim();
+    const agree  = agreeCheck.checked;
+
+    if (!name) {
+      alert('닉네임을 입력해 주세요.');
+      nameInput.focus();
+      return;
+    }
+
+    if (!phone) {
+      alert('전화번호를 입력해 주세요.');
+      phoneInput.focus();
+      return;
+    }
+
+    if (!answer || answer === 'ㅇㄱ') {
+      alert('초성 ㅇㄱ을 지우고 정답을 입력해 주세요. (예: 인권)');
+      answerInput.focus();
+      return;
+    }
+
+    if (!agree) {
+      alert('개인정보 수집·이용 동의가 필요합니다.');
+      return;
+    }
+
+    const url =
+      SCRIPT_URL +
+      '?name='  + encodeURIComponent(name) +
+      '&phone=' + encodeURIComponent(phone) +
+      '&q5='    + encodeURIComponent(answer) +
+      '&agree=' + encodeURIComponent(agree);
+
+    alert('응모가 완료되었습니다! 참여해줘서 고마워요 💛');
+
+    // 중복 제출 방지
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.5';
+    submitBtn.style.cursor = 'not-allowed';
+    submitBtn.textContent = '제출 완료';
+
+    fetch(url).catch(err => console.error('저장 오류:', err));
+  });
+</script>
+
+</body>
+</html>
