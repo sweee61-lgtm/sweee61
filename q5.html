@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>인권 퀴즈 5번 문제</title>
+  <style>
+    body {
+      margin: 0;
+      background: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: '맑은 고딕', sans-serif;
+    }
+
+    .frame {
+      width: 1280px;
+      height: 720px;
+      background-image: url('q5.png'); /* ← 업로드한 이미지 사용 */
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      border: 4px solid #000;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+
+    /* ★ 초성 입력칸 위치 조절 */
+    .input-choseong {
+      position: absolute;
+      top: 46%;    /* 이미지 기준 위치 (은하 요청 반영: ㅇㄱ 네모칸 자리) */
+      left: 57%;
+      transform: translate(-50%, -50%);
+      width: 180px;
+      height: 95px;
+      font-size: 42px;
+      font-weight: 900;
+      text-align: center;
+      border: 4px solid #000;
+      background: rgba(255,255,255,0.9);
+      box-shadow: 4px 4px 0 #000;
+    }
+
+    /* ★ 닉네임 / 전화번호 / 동의박스는 화면 아래쪽에 */
+    .form-area {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      background: rgba(255,255,255,0.95);
+      padding: 16px;
+      border: 3px solid #000;
+      box-shadow: 4px 4px 0 #000;
+    }
+
+    .form-area label {
+      font-weight: bold;
+      display: block;
+      margin-top: 6px;
+    }
+
+    .form-area input[type="text"],
+    .form-area input[type="tel"] {
+      width: 100%;
+      padding: 6px;
+      font-size: 16px;
+      border: 2px solid #000;
+      margin-top: 4px;
+    }
+
+    #agree {
+      margin-right: 6px;
+    }
+
+    button {
+      margin-top: 12px;
+      padding: 12px 24px;
+      font-size: 18px;
+      font-weight: 700;
+      border: 3px solid #000;
+      background: #ffc800;
+      cursor: pointer;
+      box-shadow: 4px 4px 0 #000;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    button:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 #000;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="frame">
+
+  <!-- ★ 초성 입력칸 -->
+  <input type="text"
+         id="q5Answer"
+         maxlength="10"
+         class="input-choseong"
+         placeholder="초성"
+  >
+
+  <!-- ★ 하단 입력 UI 영역 -->
+  <div class="form-area">
+
+    <label>닉네임 또는 이름</label>
+    <input type="text" id="name" placeholder="닉네임 입력">
+
+    <label>전화번호</label>
+    <input type="tel" id="phone" placeholder="010-1234-5678">
+
+    <label style="margin-top:10px;">
+      <input type="checkbox" id="agree">
+      개인정보 수집·이용에 동의합니다.
+    </label>
+
+    <button id="submitBtn">제출하기</button>
+  </div>
+
+</div>
+
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybuytqRKLZ5LtX9-Bn2HsSPgwIw_AIs-hvZpXpsbiV3SGXKbir98sekWsWiRhohJQNeQ/exec";
+
+  document.getElementById('submitBtn').addEventListener('click', () => {
+
+    const name   = document.getElementById('name').value.trim();
+    const phone  = document.getElementById('phone').value.trim();
+    const answer = document.getElementById('q5Answer').value.trim();
+    const agree  = document.getElementById('agree').checked;
+
+    if (!name) { alert('닉네임을 입력해 주세요.'); return; }
+    if (!phone) { alert('전화번호를 입력해 주세요.'); return; }
+    if (!answer) { alert('초성 정답을 입력해 주세요.'); return; }
+    if (!agree) { alert('개인정보 수집·이용 동의가 필요합니다.'); return; }
+
+    const url =
+      SCRIPT_URL +
+      "?name=" + encodeURIComponent(name) +
+      "&phone=" + encodeURIComponent(phone) +
+      "&q5=" + encodeURIComponent(answer) +
+      "&agree=" + encodeURIComponent(agree);
+
+    alert("응모가 완료되었습니다! 참여해줘서 고마워요 💛");
+
+    fetch(url).catch(err => console.error("저장 오류:", err));
+  });
+</script>
+
+</body>
+</html>
