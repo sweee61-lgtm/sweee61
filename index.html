@@ -2,144 +2,258 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>인권 퀴즈 5번 문제</title>
+
   <style>
+    @font-face {
+      font-family: 'DNFBitBitv2';
+      src: url('DNFBitBitv2.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
     body {
       margin: 0;
       background: #222;
+      height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: center;
-      height: 100vh;
+      align-items: flex-start;
+      overflow-x: hidden;
       font-family: '맑은 고딕', sans-serif;
     }
 
+    /* PC 기본 프레임 */
     .frame {
       width: 1280px;
       height: 720px;
-      background-image: url('q5.png'); /* 5번 문제 전체 이미지 */
+      background-image: url('q5.png');
       background-size: cover;
       background-position: center;
       position: relative;
       border: 4px solid #000;
       box-shadow: 0 0 15px rgba(0,0,0,0.5);
+
+      /* 반응형 기준점 */
+      transform-origin: top center;
+      transform: scale(1);
     }
 
-    /* ★ 가운데 초성/정답 입력 칸 (한 칸) */
+    /* 초성 입력칸 — 도트 테두리 */
     .input-choseong {
       position: absolute;
-      top: 55%;              /* 위치는 필요하면 조금씩 조정 가능 */
+      top: 55%;
       left: 60%;
       transform: translate(-50%, -50%);
       width: 220px;
       height: 100px;
+
+      background: #e9e9e9;
+      border: none;
       font-size: 50px;
       font-weight: 900;
       text-align: center;
-      border: 6px solid #000;
-      background: rgba(255,255,255,0.95);
-      box-shadow: 5px 5px 0 #000;
+      color: #000;
+
+      box-sizing: border-box;
+      image-rendering: pixelated;
     }
 
-    .input-choseong:focus {
-      outline: none;
+    /* 도트형 테두리 (가로 + 세로 조합) */
+    .input-choseong::before,
+    .input-choseong::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
     }
 
-    /* ★ 하단 응모 폼 영역 */
+    .input-choseong::before {
+      border-top: 8px solid #000;
+      border-bottom: 8px solid #000;
+    }
+
+    .input-choseong::after {
+      border-left: 8px solid #000;
+      border-right: 8px solid #000;
+    }
+
+    /* 힌트 텍스트 */
+    .hint-text {
+      position: absolute;
+      top: 67%;
+      left: 60%;
+      transform: translate(-50%, -50%);
+      font-family: 'DNFBitBitv2', sans-serif;
+      font-size: 20px;
+      color: #fff;
+      cursor: pointer;
+      text-shadow: 2px 2px #000;
+    }
+
+    /* 힌트 팝업 */
+    .hint-popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .hint-popup-inner {
+      background: #fff;
+      padding: 16px 20px;
+      min-width: 260px;
+      max-width: 300px;
+      text-align: center;
+      font-family: 'DNFBitBitv2', sans-serif;
+
+      outline: 4px solid #000;
+      box-shadow: 0 0 0 4px #000, 0 0 0 8px #fff, 0 0 0 12px #000;
+      image-rendering: pixelated;
+    }
+
+    .hint-popup-title {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    .hint-popup-body {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    .hint-close {
+      padding: 4px 12px;
+      background: #fff;
+      border: 2px solid #000;
+      cursor: pointer;
+      box-shadow: 2px 2px #000;
+      font-family: 'DNFBitBitv2';
+    }
+
+    /* 폼 박스 */
     .form-area {
       position: absolute;
-      bottom: 10px;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      width: 40%;
-      padding: 6px 10px;
-      border: 2px solid #000;
-      background: rgba(255,255,255,0.92);
-      box-shadow: 3px 3px 0 #000;
+
+      width: 330px;
+      padding: 16px 18px 14px;
+      background: #fff;
+
+      outline: 4px solid #000;
+      box-shadow: 0 0 0 4px #000, 0 0 0 7px #000;
+      font-family: 'DNFBitBitv2', sans-serif;
+      image-rendering: pixelated;
     }
 
     .form-row {
       display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 6px;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
     }
 
     .form-area input[type="text"],
     .form-area input[type="tel"] {
-      width: 48%;
-      padding: 4px 6px;
-      font-size: 14px;
+      width: 60%;
+      padding: 5px;
+      font-size: 13px;
       border: 2px solid #000;
       text-align: center;
+      background: #fff;
+      color: #333;
+      font-family: 'DNFBitBitv2';
     }
 
     .consent-label {
       font-size: 12px;
       text-align: center;
-      display: block;
-      margin-bottom: 6px;
+      margin-top: 5px;
     }
 
     #agree {
-      margin-right: 4px;
       transform: scale(0.9);
+      margin-right: 5px;
     }
 
     button {
-      padding: 6px 16px;
-      font-size: 16px;
-      font-weight: 700;
+      padding: 6px 18px;
+      font-size: 14px;
       border: 2px solid #000;
-      background: #ffc800;
+      background: #fff;
       cursor: pointer;
-      box-shadow: 3px 3px 0 #000;
       display: block;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 12px auto 0;
+      box-shadow: 2px 2px #000;
+      font-family: 'DNFBitBitv2', sans-serif;
     }
 
-    button:active {
-      transform: translate(1px, 1px);
-      box-shadow: 1px 1px 0 #000;
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
     }
+
   </style>
 </head>
+
 <body>
 
 <div class="frame">
 
-  <!-- ★ 초성/정답 입력 한 칸 -->
-  <input
-    type="text"
-    id="q5Answer"
-    class="input-choseong"
-    value="ㅇㄱ"
-    maxlength="10"
-  >
+  <input type="text" id="q5Answer" class="input-choseong" value="ㅇㄱ">
 
+  <div class="hint-text" id="hintBtn">힌트 보기</div>
 
-  <!-- ★ 하단 응모 정보 폼 -->
+  <div class="hint-popup" id="hintPopup">
+    <div class="hint-popup-inner">
+      <div class="hint-popup-title">힌트:</div>
+      <div class="hint-popup-body">oo보호와 oo증진</div>
+      <button class="hint-close" id="hintClose">닫기</button>
+    </div>
+  </div>
+
   <div class="form-area">
-
     <div class="form-row">
-      <input type="text" id="name" placeholder="닉네임">
-      <input type="tel" id="phone" placeholder="010-0000-0000">
+      <input type="text" id="name" value="닉네임">
+      <input type="tel" id="phone" value="전화번호(숫자만 입력)">
     </div>
 
-
     <label class="consent-label">
-      <input type="checkbox" id="agree">
-      개인정보 수집·이용에 동의합니다.
+      <input type="checkbox" id="agree"> 개인정보 수집·이용에 동의합니다.
     </label>
 
     <button id="submitBtn">제출하기</button>
   </div>
-
 </div>
 
+
 <script>
-  // ★ 네 Apps Script 웹 앱 주소
+
+  /* 🔍 PC / 모바일 자동 감지해서 프레임 크기 자동 조절 */
+  function applyDeviceScale() {
+    const frame = document.querySelector('.frame');
+    const width = window.innerWidth;
+
+    if (width <= 480) {
+      frame.style.transform = 'scale(0.48)';   // 작은 스마트폰
+    } else if (width <= 768) {
+      frame.style.transform = 'scale(0.65)';   // 태블릿/큰 폰
+    } else {
+      frame.style.transform = 'scale(1)';      // PC
+    }
+  }
+  window.addEventListener('load', applyDeviceScale);
+  window.addEventListener('resize', applyDeviceScale);
+
+
+  /* ▼ 기존 스크립트 ▼ */
+
   const SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbybuytqRKLZ5LtX9-Bn2HsSPgwIw_AIs-hvZpXpsbiV3SGXKbir98sekWsWiRhohJQNeQ/exec";
 
@@ -148,88 +262,116 @@
   const phoneInput  = document.getElementById('phone');
   const agreeCheck  = document.getElementById('agree');
   const submitBtn   = document.getElementById('submitBtn');
-// ★ 입력칸 클릭하면 placeholder 숨기기 + 벗어나면 복귀
-[nameInput, phoneInput].forEach(input => {
-  input.addEventListener("focus", () => {
-    input.dataset.placeholder = input.placeholder;  // 기존 placeholder 저장
-    input.placeholder = "";                         // 숨기기
+
+  const hintBtn   = document.getElementById('hintBtn');
+  const hintPopup = document.getElementById('hintPopup');
+  const hintClose = document.getElementById('hintClose');
+
+  /* 힌트 클릭 */
+  hintBtn.addEventListener("click", () => hintPopup.style.display = "flex");
+  hintClose.addEventListener("click", () => hintPopup.style.display = "none");
+  hintPopup.addEventListener("click", (e) => {
+    if (e.target === hintPopup) hintPopup.style.display = "none";
   });
 
-  input.addEventListener("blur", () => {
-    if (input.value.trim() === "") {
-      input.placeholder = input.dataset.placeholder; // 다시 보여주기
+  /* 초성칸 클릭 → 기본값 제거 */
+  answerInput.addEventListener("focus", () => {
+    if (answerInput.value === "ㅇㄱ") answerInput.value = "";
+  });
+
+  /* 초성 최대 2글자 (완성형 한글만 허용은 제출 때 검사) */
+  answerInput.addEventListener("input", () => {
+    answerInput.value = answerInput.value.slice(0, 2);
+  });
+
+  /* 기본값 제거 복구 */
+  function setupAutoClear(input, text) {
+    input.addEventListener("focus", () => {
+      if (input.value === text) input.value = "";
+    });
+    input.addEventListener("blur", () => {
+      if (input.value.trim() === "") input.value = text;
+    });
+  }
+
+  setupAutoClear(nameInput, "닉네임");
+  setupAutoClear(phoneInput, "전화번호(숫자만 입력)");
+
+  /* 전화번호 숫자만 / 11자리 제한 */
+  phoneInput.addEventListener("input", () => {
+    if (phoneInput.value !== "전화번호(숫자만 입력)") {
+      phoneInput.value = phoneInput.value
+        .replace(/[^0-9]/g, "")
+        .slice(0, 11);
     }
   });
-});
 
-// ★ 정답 입력칸 — 딱 2글자만 입력 가능 (한글 조합 포함)
-answerInput.addEventListener("input", () => {
-  if (answerInput.value.length > 2) {
-    answerInput.value = answerInput.value.slice(0, 2);
-  }
-});
-
-answerInput.addEventListener("compositionend", () => {
-  if (answerInput.value.length > 2) {
-    answerInput.value = answerInput.value.slice(0, 2);
-  }
-});
-
-
-  // ★ 처음 클릭하면 'ㅇㄱ' 지우고 바로 입력할 수 있게
-  answerInput.addEventListener('focus', () => {
-    if (answerInput.value === 'ㅇㄱ') {
-      answerInput.value = '';
-    }
+  phoneInput.addEventListener("paste", (e) => {
+    e.preventDefault();
+    const numbers = (e.clipboardData.getData("text") || "")
+      .replace(/[^0-9]/g, "")
+      .slice(0, 11);
+    document.execCommand("insertText", false, numbers);
   });
 
-  // ★ 제출 처리
-  submitBtn.addEventListener('click', () => {
+  /* 제출 */
+  submitBtn.addEventListener("click", () => {
+    if (submitBtn.disabled) return;
+
+    const answer = answerInput.value.trim();
     const name   = nameInput.value.trim();
     const phone  = phoneInput.value.trim();
-    const answer = answerInput.value.trim();
     const agree  = agreeCheck.checked;
 
-    if (!name) {
-      alert('닉네임을 입력해 주세요.');
-      nameInput.focus();
+    const cleanName  = name === "닉네임" ? "" : name;
+    const cleanPhone = phone === "전화번호(숫자만 입력)" ? "" : phone;
+
+    /* 완성형 한글 2글자 검사 */
+    if (!/^[가-힣]{2}$/.test(answer)) {
+      alert("완성된 한글 두 글자로 입력해주세요.\n(예: 이궈 / 이ㄱ 불가)");
       return;
     }
 
-    if (!phone) {
-      alert('전화번호를 입력해 주세요.');
-      phoneInput.focus();
+    if (!cleanName) {
+      alert("닉네임을 입력해주세요.");
       return;
     }
 
-    if (!answer || answer === 'ㅇㄱ') {
-      alert('초성 ㅇㄱ을 지우고 정답을 입력해 주세요. (예: 인권)');
-      answerInput.focus();
+    if (!cleanPhone) {
+      alert("전화번호를 입력해주세요.");
       return;
     }
 
     if (!agree) {
-      alert('개인정보 수집·이용 동의가 필요합니다.');
+      alert("개인정보 수집·이용에 동의해주세요.");
       return;
     }
 
-    const url =
-      SCRIPT_URL +
-      '?name='  + encodeURIComponent(name) +
-      '&phone=' + encodeURIComponent(phone) +
-      '&q5='    + encodeURIComponent(answer) +
-      '&agree=' + encodeURIComponent(agree);
-
-    alert('응모가 완료되었습니다! 참여해줘서 고마워요 💛');
-
-    // 중복 제출 방지
+    /* 제출 즉시 메시지 + 비활성화 */
+    alert("제출되었습니다! 참여해주셔서 감사합니다.");
     submitBtn.disabled = true;
-    submitBtn.style.opacity = '0.5';
-    submitBtn.style.cursor = 'not-allowed';
-    submitBtn.textContent = '제출 완료';
+    submitBtn.textContent = "제출 완료";
 
-    fetch(url).catch(err => console.error('저장 오류:', err));
+    /* Google Apps Script로 전송 */
+    const formData = new URLSearchParams();
+    formData.append("q5", answer);
+    formData.append("name", cleanName);
+    formData.append("phone", cleanPhone);
+    formData.append("agree", agree ? "동의함" : "미동의");
+
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {"Content-Type": "application/x-www-form-urlencoded"},
+      body: formData.toString()
+    })
+    .catch(() => {
+      alert("전송 오류가 발생했습니다. 다시 제출해주세요!");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "제출하기";
+    });
   });
+
 </script>
 
 </body>
