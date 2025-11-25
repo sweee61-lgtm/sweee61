@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ko">
 <head>
@@ -208,6 +209,34 @@
       transform: translate(1px,1px);
       box-shadow: 1px 1px 0 #000;
     }
+ /* ★★★ 여기 아래에 이거 그대로 붙여넣으면 됨 ★★★ */
+    @media (max-width: 768px) {
+      .form-area {
+        width: 90vw !important;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px !important;
+        font-size: 3.2vw !important;
+      }
+
+      .form-row {
+        flex-direction: column;
+        gap: 2vw;
+      }
+
+      .form-area input[type="text"],
+      .form-area input[type="tel"] {
+        width: 100% !important;
+        font-size: 3.5vw !important;
+        padding: 1.8vw !important;
+      }
+
+      button {
+        font-size: 4vw !important;
+        padding: 2.2vw 4vw !important;
+      }
+    }
+</style>
 
   </style>
 </head>
