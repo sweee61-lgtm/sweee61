@@ -1,9 +1,10 @@
-
 <!doctype html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>인권 퀴즈 5번 문제</title>
+  <!-- 🔹 모바일 화면 대응 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     @font-face {
@@ -21,60 +22,60 @@
       align-items: center;
       height: 100vh;
       font-family: '맑은 고딕', sans-serif;
+      overflow-x: hidden;
     }
 
-    /* ★ 화면 크기에 맞게 전체 프레임 자동 리사이즈 */
-.frame {
-  width: 100%;
-  max-width: 1280px;
-  aspect-ratio: 16 / 9;
-  height: auto;
-
+    .frame {
+      width: 1280px;
+      height: 720px;
       background-image: url('q5.png');
       background-size: cover;
       background-position: center;
       position: relative;
       border: 4px solid #000;
       box-shadow: 0 0 15px rgba(0,0,0,0.5);
+
+      /* 🔹 스케일 기준점 (위쪽 중앙) */
+      transform-origin: top center;
+      transform: scale(1);
     }
 
-  /* 완전 8비트 도트 프레임 */
-.input-choseong {
-  position: absolute;
-  top: 57%;
-  left: 60%;
-  transform: translate(-50%, -50%);
+    /* 완전 8비트 도트 프레임 */
+    .input-choseong {
+      position: absolute;
+      top: 55%;
+      left: 60%;
+      transform: translate(-50%, -50%);
 
-  width: 220px;
-  height: 100px;
+      width: 220px;
+      height: 100px;
 
-  font-size: 50px;
-  font-weight: 900;
-  text-align: center;
+      font-size: 50px;
+      font-weight: 900;
+      text-align: center;
 
-  background: #FFFFFF;
-  border: none;
-  color: #000;
+      background: #FFFFFF;
+      border: none;
+      color: #000;
 
-  image-rendering: pixelated;
+      image-rendering: pixelated;
 
-  /* 픽셀 테두리 만들기 */
-  box-shadow:
-    /* 위 */
-    0 -12px #000,
-    -12px -12px #000,
-    12px -12px #000,
+      /* 픽셀 테두리 만들기 */
+      box-shadow:
+        /* 위 */
+        0 -12px #000,
+        -12px -12px #000,
+        12px -12px #000,
 
-    /* 아래 */
-    0 12px #000,
-    -12px 12px #000,
-    12px 12px #000,
+        /* 아래 */
+        0 12px #000,
+        -12px 12px #000,
+        12px 12px #000,
 
-    /* 좌우 세로 라인 */
-    -12px 0 #000,
-    12px 0 #000;
-}
-
+        /* 좌우 세로 라인 */
+        -12px 0 #000,
+        12px 0 #000;
+    }
 
     /* 힌트 보기 텍스트 */
     .hint-text {
@@ -151,7 +152,7 @@
       padding: 16px 18px 14px 18px;
       background: #fff;
       outline: 4px solid #000;
-      box-shadow: 0 0 0 4px #000, 0 0 0 2px #000;
+      box-shadow: 0 0 0 4px #000, 0 0 0 7px #000;
       font-family: 'DNFBitBitv2', sans-serif;
       image-rendering: pixelated;
     }
@@ -209,34 +210,6 @@
       transform: translate(1px,1px);
       box-shadow: 1px 1px 0 #000;
     }
- /* ★★★ 여기 아래에 이거 그대로 붙여넣으면 됨 ★★★ */
-    @media (max-width: 768px) {
-      .form-area {
-        width: 90vw !important;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 10px !important;
-        font-size: 3.2vw !important;
-      }
-
-      .form-row {
-        flex-direction: column;
-        gap: 2vw;
-      }
-
-      .form-area input[type="text"],
-      .form-area input[type="tel"] {
-        width: 100% !important;
-        font-size: 3.5vw !important;
-        padding: 1.8vw !important;
-      }
-
-      button {
-        font-size: 4vw !important;
-        padding: 2.2vw 4vw !important;
-      }
-    }
-</style>
 
   </style>
 </head>
@@ -277,9 +250,29 @@
   </div>
 </div>
 
-
-
 <script>
+  /* 🔍 PC / 모바일 자동 감지해서 프레임 스케일 조절 */
+  function applyDeviceScale() {
+    const frame = document.querySelector('.frame');
+    if (!frame) return;
+
+    const width = window.innerWidth;
+
+    if (width <= 480) {
+      // 작은 스마트폰
+      frame.style.transform = 'scale(0.48)';
+    } else if (width <= 768) {
+      // 큰 폰/태블릿
+      frame.style.transform = 'scale(0.65)';
+    } else {
+      // PC
+      frame.style.transform = 'scale(1)';
+    }
+  }
+
+  window.addEventListener('load', applyDeviceScale);
+  window.addEventListener('resize', applyDeviceScale);
+
 
   const SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbybuytqRKLZ5LtX9-Bn2HsSPgwIw_AIs-hvZpXpsbiV3SGXKbir98sekWsWiRhohJQNeQ/exec";
@@ -338,27 +331,19 @@
   setupAutoClear(nameInput,  "닉네임");
   setupAutoClear(phoneInput, "전화번호(숫자만 입력)");
 
-  /* 🔢 전화번호: 숫자만 입력 */
+  /* 🔢 전화번호: 숫자만 + 11자리 제한 */
   phoneInput.addEventListener("input", () => {
-    // 기본 안내문구 상태일 때는 그대로 두고,
-    // 실제 입력을 시작하면 숫자만 남기기
     if (phoneInput.value !== "전화번호(숫자만 입력)") {
-      phoneInput.value = phoneInput.value.replace(/[^0-9]/g, "");
+      phoneInput.value = phoneInput.value
+        .replace(/[^0-9]/g, "")
+        .slice(0, 11);
     }
   });
-
-phoneInput.addEventListener("input", () => {
-  if (phoneInput.value !== "전화번호(숫자만 입력)") {
-    phoneInput.value = phoneInput.value
-      .replace(/[^0-9]/g, "")   // 숫자만 남기기
-      .slice(0, 11);            // 🔥 최대 11자리 제한
-  }
-});
 
   phoneInput.addEventListener("paste", (e) => {
     e.preventDefault();
     const paste = (e.clipboardData || window.clipboardData).getData("text");
-    const numbersOnly = paste.replace(/[^0-9]/g, "");
+    const numbersOnly = paste.replace(/[^0-9]/g, "").slice(0, 11);
     document.execCommand("insertText", false, numbersOnly);
   });
 
@@ -377,7 +362,7 @@ phoneInput.addEventListener("input", () => {
     /* 1) 초성: 완성형 한글 2글자만 허용 */
     const isTwoHangul = /^[가-힣]{2}$/.test(answer);
     if (!isTwoHangul) {
-      alert("정답을 두 글자로 입력해 주세요.");
+      alert("초성과 중성이 결합된 완성된 한글 두 글자로 입력해 주세요.\n(예: 이궈 / 이ㄱ 불가)");
       return;
     }
 
@@ -418,11 +403,12 @@ phoneInput.addEventListener("input", () => {
       body: formData.toString()
     }).catch(err => {
       console.error("전송 오류:", err);
-      // 에러가 나도 버튼은 그대로 비활성화 유지 (사용자 입장에선 이미 제출 완료)
+      alert("전송 중 오류가 발생했습니다. 다시 제출해 주세요!");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "제출하기";
     });
   });
 </script>
 
 </body>
 </html>
-
