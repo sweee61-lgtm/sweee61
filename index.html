@@ -297,48 +297,35 @@
     const phone  = phoneInput.value.trim();
     const agree  = agreeCheck.checked;
 
-    const cleanName  = name;
-    const cleanPhone = phone;
-
     if (!/^[가-힣]{2}$/.test(answer)) return alert("정답을 두 글자로 입력해 주세요.");
-    if (!cleanName) return alert("닉네임을 입력해 주세요.");
-    if (!cleanPhone) return alert("전화번호를 입력해 주세요.");
+    if (!name) return alert("닉네임을 입력해 주세요.");
+    if (!phone) return alert("전화번호를 입력해 주세요.");
+    if (!agree) return alert("개인정보 수집·이용에 동의해 주세요.");
 
-    /* 🔥 버튼 즉시 변경 → 즉시 반응 */
     submitBtn.disabled = true;
     submitBtn.textContent = "중복 확인 중...";
 
-    /* 🔥 중복 검사 */
-    const duplicated = await checkDuplicate(cleanPhone);
+    const duplicated = await checkDuplicate(phone);
+
+    /* 🔹 중복일 때 */
     if (duplicated) {
       alert("이미 참여하신 전화번호입니다!");
-
-      /* 🔥 중복이어도 X 버튼은 떠야 함 */
       exitBtn.classList.add("show");
-
-      /* 제출 다시 가능하게 */
       submitBtn.disabled = false;
       submitBtn.textContent = "제출하기";
       return;
     }
 
-    if (!agree) {
-      alert("개인정보 수집·이용에 동의해 주세요.");
-      submitBtn.disabled = false;
-      submitBtn.textContent = "제출하기";
-      return;
-    }
-
-    /* 🔥 정상 제출 */
-   alert("제출 완료! 참여해주셔서 감사합니다.");
+    /* 🔹 정상 제출일 때 */
+    alert("제출 완료!");
 
     submitBtn.textContent = "제출 완료";
     exitBtn.classList.add("show");
 
     const formData = new URLSearchParams();
     formData.append("q5",   answer);
-    formData.append("name", cleanName);
-    formData.append("phone", cleanPhone);
+    formData.append("name", name);
+    formData.append("phone", phone);
     formData.append("agree", agree ? "동의함" : "미동의");
 
     fetch(SCRIPT_URL, {
@@ -349,14 +336,22 @@
     });
   });
 
-  /* 🔹 종료 버튼 */
+  /* 🔹 종료(X) 버튼 */
   exitBtn.addEventListener("click", () => {
-    location.href = "https://ombudsman.seoul.go.kr/front/board/boardContentsView.do?board_id=75&contents_id=5cb3bfda84194d51801749a518787573";
-});
+
+    alert("열려있는 이전 문제 창도 함께 닫아주시기 바랍니다.");
+
+    const returnURL =
+      "https://ombudsman.seoul.go.kr/front/board/boardContentsList.do?board_id=75";
+
+    // iframe 안에서 열렸을 가능성 대비
+    if (window.top && window.top !== window) {
+      window.top.location.href = returnURL;
+      return;
+    }
+    location.href = returnURL;
+  });
 </script>
 
 </body>
 </html>
-
-
-
