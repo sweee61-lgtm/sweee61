@@ -22,13 +22,10 @@
       font-family: '맑은 고딕', sans-serif;
     }
 
-    /* ★ 화면 크기에 맞게 전체 프레임 자동 리사이즈 */
-.frame {
-  width: 100%;
-  max-width: 1280px;
-  aspect-ratio: 16 / 9;
-  height: auto;
-
+    .frame {
+      width: 100%;
+      max-width: 1280px;
+      aspect-ratio: 16 / 9;
       background-image: url('q5.png');
       background-size: cover;
       background-position: center;
@@ -37,45 +34,31 @@
       box-shadow: 0 0 15px rgba(0,0,0,0.5);
     }
 
-  /* 완전 8비트 도트 프레임 */
-.input-choseong {
-  position: absolute;
-  top: 57%;
-  left: 60%;
-  transform: translate(-50%, -50%);
+    .input-choseong {
+      position: absolute;
+      top: 57%;
+      left: 60%;
+      transform: translate(-50%, -50%);
+      width: 220px;
+      height: 100px;
+      font-size: 50px;
+      font-weight: 900;
+      text-align: center;
+      background: #FFFFFF;
+      border: none;
+      color: #000;
+      image-rendering: pixelated;
+      box-shadow:
+        0 -12px #000,
+        -12px -12px #000,
+        12px -12px #000,
+        0 12px #000,
+        -12px 12px #000,
+        12px 12px #000,
+        -12px 0 #000,
+        12px 0 #000;
+    }
 
-  width: 220px;
-  height: 100px;
-
-  font-size: 50px;
-  font-weight: 900;
-  text-align: center;
-
-  background: #FFFFFF;
-  border: none;
-  color: #000;
-
-  image-rendering: pixelated;
-
-  /* 픽셀 테두리 만들기 */
-  box-shadow:
-    /* 위 */
-    0 -12px #000,
-    -12px -12px #000,
-    12px -12px #000,
-
-    /* 아래 */
-    0 12px #000,
-    -12px 12px #000,
-    12px 12px #000,
-
-    /* 좌우 세로 라인 */
-    -12px 0 #000,
-    12px 0 #000;
-}
-
-
-    /* 힌트 보기 텍스트 */
     .hint-text {
       position: absolute;
       top: 67%;
@@ -88,7 +71,6 @@
       text-shadow: 2px 2px 0 #000;
     }
 
-    /* 힌트 팝업 전체 */
     .hint-popup {
       position: fixed;
       inset: 0;
@@ -99,7 +81,6 @@
       z-index: 999;
     }
 
-    /* 팝업 내부 */
     .hint-popup-inner {
       background: #fff;
       padding: 16px 20px;
@@ -108,21 +89,7 @@
       text-align: center;
       font-family: 'DNFBitBitv2', sans-serif;
       outline: 4px solid #000;
-      box-shadow:
-        0 0 0 4px #000,
-        0 0 0 8px #fff,
-        0 0 0 12px #000;
       image-rendering: pixelated;
-    }
-
-    .hint-popup-title {
-      font-size: 18px;
-      margin-bottom: 8px;
-    }
-
-    .hint-popup-body {
-      font-size: 16px;
-      margin-bottom: 12px;
     }
 
     .hint-close {
@@ -132,15 +99,8 @@
       background: #fff;
       cursor: pointer;
       box-shadow: 2px 2px 0 #000;
-      font-family: 'DNFBitBitv2', sans-serif;
     }
 
-    .hint-close:active {
-      transform: translate(1px,1px);
-      box-shadow: 1px 1px 0 #000;
-    }
-
-    /* 말풍선 박스 */
     .form-area {
       position: absolute;
       bottom: 20px;
@@ -204,9 +164,27 @@
       box-shadow: none;
     }
 
-    button:active:not(:disabled) {
-      transform: translate(1px,1px);
-      box-shadow: 1px 1px 0 #000;
+    .exit-btn {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      background: #000;
+      color: #fff;
+      border: 3px solid #fff;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DNFBitBitv2', sans-serif;
+      font-size: 22px;
+      cursor: pointer;
+      z-index: 2000;
+      box-shadow: 0 0 0 4px #000;
+    }
+    .exit-btn.show {
+      display: flex;
     }
 
   </style>
@@ -216,27 +194,23 @@
 
 <div class="frame">
 
-  <!-- 초성 입력칸 -->
   <input type="text" id="q5Answer" class="input-choseong" value="ㅇㄱ" maxlength="2">
 
-  <!-- 힌트 보기 -->
   <div class="hint-text" id="hintBtn">힌트 보기</div>
 
-  <!-- 힌트 팝업 -->
   <div class="hint-popup" id="hintPopup">
     <div class="hint-popup-inner">
       <div class="hint-popup-title">힌트:</div>
       <div class="hint-popup-body">oo보호와 oo증진</div>
-      <button type="button" class="hint-close" id="hintClose">닫기</button>
+      <div class="hint-close" id="hintClose">닫기</div>
     </div>
   </div>
 
-  <!-- 폼 박스 -->
   <div class="form-area">
 
     <div class="form-row">
-      <input type="text" id="name"  value="닉네임">
-      <input type="tel"  id="phone" value="전화번호(숫자만 입력)">
+      <input type="text" id="name" value="닉네임">
+      <input type="tel" id="phone" value="전화번호(숫자만 입력)">
     </div>
 
     <label class="consent-label">
@@ -244,140 +218,92 @@
     </label>
 
     <button id="submitBtn">제출하기</button>
-
   </div>
 </div>
 
-
+<div class="exit-btn" id="exitBtn">X</div>
 
 <script>
-
   const SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbybuytqRKLZ5LtX9-Bn2HsSPgwIw_AIs-hvZpXpsbiV3SGXKbir98sekWsWiRhohJQNeQ/exec";
+    "https://script.google.com/macros/s/AKfycbxV2pGf4fPhfO0GSG0yqv9ZErV1Dai2iQUUU9k7j-Q4b8cw1oOpinX5TixXTeja71n43g/exec";
 
   const answerInput = document.getElementById('q5Answer');
   const nameInput   = document.getElementById('name');
   const phoneInput  = document.getElementById('phone');
   const agreeCheck  = document.getElementById('agree');
   const submitBtn   = document.getElementById('submitBtn');
+  const exitBtn     = document.getElementById('exitBtn');
 
   const hintBtn   = document.getElementById('hintBtn');
   const hintPopup = document.getElementById('hintPopup');
   const hintClose = document.getElementById('hintClose');
 
-  /* 🔹 힌트 보기 클릭 → 팝업 열기 */
-  hintBtn.addEventListener("click", () => {
-    hintPopup.style.display = "flex";
-  });
-
-  /* 🔹 힌트 닫기 */
-  hintClose.addEventListener("click", () => {
-    hintPopup.style.display = "none";
-  });
-
-  hintPopup.addEventListener("click", (e) => {
-    if (e.target === hintPopup) {
-      hintPopup.style.display = "none";
-    }
-  });
-
-  /* 🔹 초성 칸: 처음 클릭하면 ㅇㄱ 지워짐 */
+  /* 🔹 초성칸 ㅇㄱ 클릭 시 비우기 */
   answerInput.addEventListener("focus", () => {
-    if (answerInput.value === "ㅇㄱ") {
-      answerInput.value = "";
-    }
+    if (answerInput.value === "ㅇㄱ") answerInput.value = "";
   });
-
-  /* 🔹 초성: 최대 2글자 */
   answerInput.addEventListener("input", () => {
     answerInput.value = answerInput.value.slice(0, 2);
   });
-  answerInput.addEventListener("compositionend", () => {
-    answerInput.value = answerInput.value.slice(0, 2);
-  });
 
-  /* 🔹 기본값 삭제 & 복원 */
-  function setupAutoClear(input, text) {
-    input.addEventListener("focus", () => {
-      if (input.value === text) input.value = "";
-    });
-    input.addEventListener("blur", () => {
-      if (input.value.trim() === "") input.value = text;
-    });
-  }
-
-  setupAutoClear(nameInput,  "닉네임");
-  setupAutoClear(phoneInput, "전화번호(숫자만 입력)");
-
-  /* 🔢 전화번호: 숫자만 입력 */
-  phoneInput.addEventListener("input", () => {
-    // 기본 안내문구 상태일 때는 그대로 두고,
-    // 실제 입력을 시작하면 숫자만 남기기
-    if (phoneInput.value !== "전화번호(숫자만 입력)") {
-      phoneInput.value = phoneInput.value.replace(/[^0-9]/g, "");
+  /* 🔹 중복 체크 */
+  async function checkDuplicate(phone) {
+    try {
+      const res = await fetch(`${SCRIPT_URL}?phone=${encodeURIComponent(phone)}`);
+      return (await res.text()).trim() === "DUPLICATE";
+    } catch {
+      return false;
     }
-  });
-
-phoneInput.addEventListener("input", () => {
-  if (phoneInput.value !== "전화번호(숫자만 입력)") {
-    phoneInput.value = phoneInput.value
-      .replace(/[^0-9]/g, "")   // 숫자만 남기기
-      .slice(0, 11);            // 🔥 최대 11자리 제한
   }
-});
 
-  phoneInput.addEventListener("paste", (e) => {
-    e.preventDefault();
-    const paste = (e.clipboardData || window.clipboardData).getData("text");
-    const numbersOnly = paste.replace(/[^0-9]/g, "");
-    document.execCommand("insertText", false, numbersOnly);
-  });
-
-  /* 🔥 제출 조건 & 전송 */
-  submitBtn.addEventListener("click", () => {
-    if (submitBtn.disabled) return; // 이미 제출했으면 무시
+  /* 🔹 제출 */
+  submitBtn.addEventListener("click", async () => {
+    if (submitBtn.disabled) return;
 
     const answer = answerInput.value.trim();
     const name   = nameInput.value.trim();
     const phone  = phoneInput.value.trim();
     const agree  = agreeCheck.checked;
 
-    const cleanName  = (name  === "닉네임") ? "" : name;
-    const cleanPhone = (phone === "전화번호(숫자만 입력)") ? "" : phone;
+    const cleanName  = name  === "닉네임" ? "" : name;
+    const cleanPhone = phone === "전화번호(숫자만 입력)" ? "" : phone;
 
-    /* 1) 초성: 완성형 한글 2글자만 허용 */
-    const isTwoHangul = /^[가-힣]{2}$/.test(answer);
-    if (!isTwoHangul) {
-      alert("정답을 두 글자로 입력해 주세요.");
+    if (!/^[가-힣]{2}$/.test(answer)) return alert("정답을 두 글자로 입력해 주세요.");
+    if (!cleanName) return alert("닉네임을 입력해 주세요.");
+    if (!cleanPhone) return alert("전화번호를 입력해 주세요.");
+
+    /* 🔥 버튼 즉시 변경 → 즉시 반응 */
+    submitBtn.disabled = true;
+    submitBtn.textContent = "중복 확인 중...";
+
+    /* 🔥 중복 검사 */
+    const duplicated = await checkDuplicate(cleanPhone);
+    if (duplicated) {
+      alert("이미 참여하신 전화번호입니다!");
+
+      /* 🔥 중복이어도 X 버튼은 떠야 함 */
+      exitBtn.classList.add("show");
+
+      /* 제출 다시 가능하게 */
+      submitBtn.disabled = false;
+      submitBtn.textContent = "제출하기";
       return;
     }
 
-    /* 2) 닉네임 */
-    if (!cleanName) {
-      alert("닉네임을 입력해 주세요.");
-      return;
-    }
-
-    /* 3) 전화번호 (숫자만 입력되도록 이미 필터됨, 값만 체크) */
-    if (!cleanPhone) {
-      alert("전화번호를 입력해 주세요.");
-      return;
-    }
-
-    /* 4) 개인정보 동의 */
     if (!agree) {
       alert("개인정보 수집·이용에 동의해 주세요.");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "제출하기";
       return;
     }
 
-    /* 🔥 여기서 바로 메시지 + 버튼 비활성화 */
+    /* 🔥 정상 제출 */
     alert("제출되었습니다! 참여해 주셔서 감사합니다.");
-    submitBtn.disabled = true;
     submitBtn.textContent = "제출 완료";
+    exitBtn.classList.add("show");
 
-    /* 🔥 전송은 뒤에서 천천히 진행 (사용자는 이미 완료 알림을 본 상태) */
     const formData = new URLSearchParams();
-    formData.append("q5",   answer);
+    formData.append("q5", answer);
     formData.append("name", cleanName);
     formData.append("phone", cleanPhone);
     formData.append("agree", agree ? "동의함" : "미동의");
@@ -387,13 +313,15 @@ phoneInput.addEventListener("input", () => {
       mode: "no-cors",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: formData.toString()
-    }).catch(err => {
-      console.error("전송 오류:", err);
-      // 에러가 나도 버튼은 그대로 비활성화 유지 (사용자 입장에선 이미 제출 완료)
     });
+  });
+
+  /* 🔹 종료 버튼 */
+  exitBtn.addEventListener("click", () => {
+    try { window.close(); } catch {}
+    location.href = "about:blank";
   });
 </script>
 
 </body>
 </html>
-
