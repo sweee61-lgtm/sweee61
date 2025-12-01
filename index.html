@@ -246,6 +246,32 @@
     answerInput.value = answerInput.value.slice(0, 2);
   });
 
+  /* 🔹 닉네임 / 전화번호 플레이스홀더 자동 제거 & 복원 */
+  function setupAutoClear(input, placeholderText) {
+    input.addEventListener("focus", () => {
+      if (input.value === placeholderText) {
+        input.value = "";
+      }
+    });
+    input.addEventListener("blur", () => {
+      if (input.value.trim() === "") {
+        input.value = placeholderText;
+      }
+    });
+  }
+
+  setupAutoClear(nameInput,  "닉네임");
+  setupAutoClear(phoneInput, "전화번호(숫자만 입력)");
+
+  /* 🔹 전화번호 숫자만 + 최대 11자리 */
+  phoneInput.addEventListener("input", () => {
+    if (phoneInput.value !== "전화번호(숫자만 입력)") {
+      phoneInput.value = phoneInput.value
+        .replace(/[^0-9]/g, "")
+        .slice(0, 11);
+    }
+  });
+
   /* 🔹 중복 체크 */
   async function checkDuplicate(phone) {
     try {
@@ -303,7 +329,7 @@
     exitBtn.classList.add("show");
 
     const formData = new URLSearchParams();
-    formData.append("q5", answer);
+    formData.append("q5",   answer);
     formData.append("name", cleanName);
     formData.append("phone", cleanPhone);
     formData.append("agree", agree ? "동의함" : "미동의");
