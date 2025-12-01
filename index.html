@@ -246,30 +246,36 @@
     answerInput.value = answerInput.value.slice(0, 2);
   });
 
-  /* 🔹 닉네임 / 전화번호 플레이스홀더 자동 제거 & 복원 */
-  function setupAutoClear(input, placeholderText) {
-    input.addEventListener("focus", () => {
-      if (input.value === placeholderText) {
-        input.value = "";
-      }
-    });
-    input.addEventListener("blur", () => {
-      if (input.value.trim() === "") {
-        input.value = placeholderText;
-      }
-    });
-  }
+  /* 🔹 닉네임 / 전화번호: 첫 클릭 시 한 번만 무조건 지우기 */
+  let nameCleared  = false;
+  let phoneCleared = false;
 
-  setupAutoClear(nameInput,  "닉네임");
-  setupAutoClear(phoneInput, "전화번호(숫자만 입력)");
+  nameInput.addEventListener("focus", () => {
+    if (!nameCleared) {
+      nameInput.value = "";
+      nameCleared = true;
+    }
+  });
+
+  phoneInput.addEventListener("focus", () => {
+    if (!phoneCleared) {
+      phoneInput.value = "";
+      phoneCleared = true;
+    }
+  });
 
   /* 🔹 전화번호 숫자만 + 최대 11자리 */
   phoneInput.addEventListener("input", () => {
-    if (phoneInput.value !== "전화번호(숫자만 입력)") {
-      phoneInput.value = phoneInput.value
-        .replace(/[^0-9]/g, "")
-        .slice(0, 11);
-    }
+    phoneInput.value = phoneInput.value
+      .replace(/[^0-9]/g, "")
+      .slice(0, 11);
+  });
+
+  /* 🔹 힌트 팝업 */
+  hintBtn.addEventListener("click", () => hintPopup.style.display = "flex");
+  hintClose.addEventListener("click", () => hintPopup.style.display = "none");
+  hintPopup.addEventListener("click", e => {
+    if (e.target === hintPopup) hintPopup.style.display = "none";
   });
 
   /* 🔹 중복 체크 */
@@ -291,8 +297,8 @@
     const phone  = phoneInput.value.trim();
     const agree  = agreeCheck.checked;
 
-    const cleanName  = name  === "닉네임" ? "" : name;
-    const cleanPhone = phone === "전화번호(숫자만 입력)" ? "" : phone;
+    const cleanName  = name;
+    const cleanPhone = phone;
 
     if (!/^[가-힣]{2}$/.test(answer)) return alert("정답을 두 글자로 입력해 주세요.");
     if (!cleanName) return alert("닉네임을 입력해 주세요.");
