@@ -348,11 +348,17 @@
     });
   });
 
-  /* 🔹 종료 버튼 */
+  /* 🔹 종료 버튼 (완성본) */
   exitBtn.addEventListener("click", () => {
-  window.open('', '_self');
-  window.close();
-});
+    // 1단계 : 스크립트로 열린 창이면 실제로 닫림
+    window.open('', '_self');
+    window.close();
+
+    // 2단계 : 닫기 실패한 경우 → 강제 이동으로 종료 효과
+    setTimeout(() => {
+      window.location.replace("https://ombudsman.seoul.go.kr/");
+    }, 100);
+  });
 </script>
 
 </body>
